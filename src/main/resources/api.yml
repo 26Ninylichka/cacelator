@@ -1,0 +1,1962 @@
+openapi: 3.1.1
+
+info:
+  title: Cakelator API
+  version: 0.0.1
+
+servers:
+  - url: http://localhost:8080
+
+tags:
+  - name: Auth
+    description: Auth endpoints.
+  - name: Users
+    description: User profile endpoints.
+  - name: User Settings
+    description: Locale/currency/base units settings.
+  - name: Locales
+    description: Locale reference endpoints.
+  - name: Currencies
+    description: Currency reference endpoints.
+  - name: Units
+    description: Units reference endpoints.
+  - name: Products
+    description: Ingredients/products CRUD.
+  - name: Package Prices
+    description: Product package price history.
+  - name: Desserts
+    description: Desserts CRUD.
+  - name: Components
+    description: Components CRUD.
+  - name: Dessert Components
+    description: Link desserts with components.
+  - name: Component Items
+    description: Link components with products and quantities.
+  - name: Calculations
+    description: Calculation runs and their items.
+
+paths:
+  # Auth
+  /auth/sign-up:
+    post:
+      summary: Sign up a new user.
+      tags: [ Auth ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/SignUpRequest' }
+      responses:
+        201:
+          description: Created
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/TokenResponse' }
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+
+  /auth/login:
+    post:
+      summary: Login.
+      tags: [ Auth ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/LoginRequest' }
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/TokenResponse' }
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+
+  # Users
+    get:
+      summary: Get current user profile.
+      tags: [ Users ]
+
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/AppUser' }
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+
+    put:
+      summary: Update current user profile.
+      tags: [ Users ]
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/AppUserUpdate' }
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/AppUser' }
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+
+  # User settings
+  /settings:
+    get:
+      summary: Get current user's settings.
+      tags: [ User Settings ]
+
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/UserSettings' }
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+
+    put:
+      summary: Update current user's settings.
+      tags: [ User Settings ]
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/UserSettingsUpdate' }
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/UserSettings' }
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+
+  # Reference: Locales
+  /locales:
+    get:
+      summary: List locales.
+      tags: [ Locales ]
+
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/Locale' }
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+
+  /locales/{localeId}:
+    get:
+      summary: Get locale by id.
+      tags: [ Locales ]
+
+      parameters:
+        - $ref: '#/components/parameters/LocaleId'
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Locale' }
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+
+  # Reference: Currencies
+  /currencies:
+    get:
+      summary: List currencies.
+      tags: [ Currencies ]
+
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/Currency' }
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+
+  /currencies/{currencyCode}:
+    get:
+      summary: Get currency by code.
+      tags: [ Currencies ]
+
+      parameters:
+        - $ref: '#/components/parameters/CurrencyCode'
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Currency' }
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+
+  #  Reference: Units
+  /units:
+    get:
+      summary: List units.
+      tags: [ Units ]
+
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/Unit' }
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+
+  /units/{unitId}:
+    get:
+      summary: Get unit by id.
+      tags: [ Units ]
+
+      parameters:
+        - $ref: '#/components/parameters/UnitId'
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Unit' }
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+
+  # Products
+  /products:
+    get:
+      summary: List products (current user).
+      tags: [ Products ]
+
+      parameters:
+        - name: q
+          in: query
+          required: false
+          schema: { type: string }
+          description: Search by name (contains).
+        - name: is_active
+          in: query
+          required: false
+          schema: { type: boolean }
+        - name: limit
+          in: query
+          required: false
+          schema: { type: integer, minimum: 1, maximum: 200, default: 50 }
+        - name: offset
+          in: query
+          required: false
+          schema: { type: integer, minimum: 0, default: 0 }
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/Product' }
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+
+    post:
+      summary: Create product.
+      tags: [ Products ]
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/ProductCreate' }
+      responses:
+        201:
+          description: Created
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Product' }
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+
+  /products/{productId}:
+    get:
+      summary: Get product by id.
+      tags: [ Products ]
+
+      parameters:
+        - $ref: '#/components/parameters/ProductId'
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Product' }
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+
+    put:
+      summary: Update product.
+      tags: [ Products ]
+
+      parameters:
+        - $ref: '#/components/parameters/ProductId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/ProductUpdate' }
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Product' }
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+
+    delete:
+      summary: Delete product.
+      tags: [ Products ]
+
+      parameters:
+        - $ref: '#/components/parameters/ProductId'
+      responses:
+        204:
+          description: No Content
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+
+  #  Package Prices
+  /products/{productId}/package-prices:
+    get:
+      summary: List package prices for product.
+      tags: [ Package Prices ]
+
+      parameters:
+        - $ref: '#/components/parameters/ProductId'
+        - name: limit
+          in: query
+          required: false
+          schema: { type: integer, minimum: 1, maximum: 200, default: 50 }
+        - name: offset
+          in: query
+          required: false
+          schema: { type: integer, minimum: 0, default: 0 }
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/ProductPackagePrice' }
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+
+    post:
+      summary: Add package price entry.
+      tags: [ Package Prices ]
+
+      parameters:
+        - $ref: '#/components/parameters/ProductId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/ProductPackagePriceCreate' }
+      responses:
+        201:
+          description: Created
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ProductPackagePrice' }
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+
+  /package-prices/{packagePriceId}:
+    get:
+      summary: Get package price entry.
+      tags: [ Package Prices ]
+
+      parameters:
+        - $ref: '#/components/parameters/PackagePriceId'
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ProductPackagePrice' }
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+
+    delete:
+      summary: Delete package price entry.
+      tags: [ Package Prices ]
+
+      parameters:
+        - $ref: '#/components/parameters/PackagePriceId'
+      responses:
+        204:
+          description: No Content
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+
+  #  Desserts
+  /desserts:
+    get:
+      summary: List desserts.
+      tags: [ Desserts ]
+
+      parameters:
+        - name: q
+          in: query
+          required: false
+          schema: { type: string }
+          description: Search by dessert name (contains).
+        - name: limit
+          in: query
+          required: false
+          schema: { type: integer, minimum: 1, maximum: 200, default: 50 }
+        - name: offset
+          in: query
+          required: false
+          schema: { type: integer, minimum: 0, default: 0 }
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/Dessert' }
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+
+    post:
+      summary: Create dessert.
+      tags: [ Desserts ]
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/DessertCreate' }
+      responses:
+        201:
+          description: Created
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Dessert' }
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+
+  /desserts/{dessertId}:
+    get:
+      summary: Get dessert by id.
+      tags: [ Desserts ]
+
+      parameters:
+        - $ref: '#/components/parameters/DessertId'
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Dessert' }
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+
+    put:
+      summary: Update dessert.
+      tags: [ Desserts ]
+
+      parameters:
+        - $ref: '#/components/parameters/DessertId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/DessertUpdate' }
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Dessert' }
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+
+    delete:
+      summary: Delete dessert.
+      tags: [ Desserts ]
+
+      parameters:
+        - $ref: '#/components/parameters/DessertId'
+      responses:
+        204:
+          description: No Content
+
+  #  Components
+  /components:
+    get:
+      summary: List components.
+      tags: [ Components ]
+
+      parameters:
+        - name: q
+          in: query
+          required: false
+          schema: { type: string }
+          description: Search by component name (contains).
+        - name: limit
+          in: query
+          required: false
+          schema: { type: integer, minimum: 1, maximum: 200, default: 50 }
+        - name: offset
+          in: query
+          required: false
+          schema: { type: integer, minimum: 0, default: 0 }
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/Component' }
+
+    post:
+      summary: Create component.
+      tags: [ Components ]
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/ComponentCreate' }
+      responses:
+        201:
+          description: Created
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Component' }
+
+  /components/{componentId}:
+    get:
+      summary: Get component by id.
+      tags: [ Components ]
+
+      parameters:
+        - $ref: '#/components/parameters/ComponentId'
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Component' }
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+
+    put:
+      summary: Update component.
+      tags: [ Components ]
+
+      parameters:
+        - $ref: '#/components/parameters/ComponentId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/ComponentUpdate' }
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Component' }
+
+    delete:
+      summary: Delete component.
+      tags: [ Components ]
+
+      parameters:
+        - $ref: '#/components/parameters/ComponentId'
+      responses:
+        204:
+          description: No Content
+
+  #  DESSERT_COMPONENT (LINK)
+  /desserts/{dessertId}/components:
+    get:
+      summary: List dessert components (links) for dessert.
+      tags: [ Dessert Components ]
+
+      parameters:
+        - $ref: '#/components/parameters/DessertId'
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/DessertComponent' }
+
+    post:
+      summary: Attach a component to dessert.
+      tags: [ Dessert Components ]
+
+      parameters:
+        - $ref: '#/components/parameters/DessertId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/DessertComponentCreate' }
+      responses:
+        201:
+          description: Created
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/DessertComponent' }
+
+  /dessert-components/{dessertComponentId}:
+    put:
+      summary: Update dessert-component link (order/note).
+      tags: [ Dessert Components ]
+
+      parameters:
+        - $ref: '#/components/parameters/DessertComponentId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/DessertComponentUpdate' }
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/DessertComponent' }
+
+    delete:
+      summary: Remove component from dessert.
+      tags: [ Dessert Components ]
+
+      parameters:
+        - $ref: '#/components/parameters/DessertComponentId'
+      responses:
+        204:
+          description: No Content
+
+  #  COMPONENT_ITEM
+  /components/{componentId}/items:
+    get:
+      summary: List items for component.
+      tags: [ Component Items ]
+
+      parameters:
+        - $ref: '#/components/parameters/ComponentId'
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/ComponentItem' }
+
+    post:
+      summary: Add product item to component.
+      tags: [ Component Items ]
+
+      parameters:
+        - $ref: '#/components/parameters/ComponentId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/ComponentItemCreate' }
+      responses:
+        201:
+          description: Created
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ComponentItem' }
+
+  /component-items/{componentItemId}:
+    put:
+      summary: Update component item (qty/unit/sort).
+      tags: [ Component Items ]
+
+      parameters:
+        - $ref: '#/components/parameters/ComponentItemId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/ComponentItemUpdate' }
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ComponentItem' }
+
+    delete:
+      summary: Delete component item.
+      tags: [ Component Items ]
+
+      parameters:
+        - $ref: '#/components/parameters/ComponentItemId'
+      responses:
+        204:
+          description: No Content
+
+  # ===== CALCULATIONS (RUNS + ITEMS) =====
+  /calc-runs:
+    get:
+      summary: List calculation runs.
+      tags: [ Calculations ]
+
+      parameters:
+        - name: dessert_id
+          in: query
+          required: false
+          schema: { type: string, format: uuid }
+        - name: limit
+          in: query
+          required: false
+          schema: { type: integer, minimum: 1, maximum: 200, default: 50 }
+        - name: offset
+          in: query
+          required: false
+          schema: { type: integer, minimum: 0, default: 0 }
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/CalcRun' }
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+
+    post:
+      summary: Create a calculation run.
+      tags: [ Calculations ]
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/CalcRunCreate' }
+      responses:
+        201:
+          description: Created
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/CalcRun' }
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+
+  /calc-runs/{calcRunId}:
+    get:
+      summary: Get calculation run by id.
+      tags: [ Calculations ]
+
+      parameters:
+        - $ref: '#/components/parameters/CalcRunId'
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/CalcRun' }
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+
+    delete:
+      summary: Delete calculation run.
+      tags: [ Calculations ]
+
+      parameters:
+        - $ref: '#/components/parameters/CalcRunId'
+      responses:
+        204:
+          description: No Content
+
+  /calc-runs/{calcRunId}/items:
+    get:
+      summary: List calculation items for run.
+      tags: [ Calculations ]
+
+      parameters:
+        - $ref: '#/components/parameters/CalcRunId'
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/CalcItem' }
+
+  #  1-CLICK CALCULATION
+  /desserts/{dessertId}/calculate:
+    post:
+      summary: Calculate scaled recipe (creates calc_run and calc_items).
+      tags: [ Calculations ]
+
+      parameters:
+        - $ref: '#/components/parameters/DessertId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/CalculateDessertRequest' }
+      responses:
+        201:
+          description: Created
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/CalculateDessertResponse' }
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+
+  #  FULL VIEW: DESSERT
+  /desserts/{dessertId}/full:
+    get:
+      summary: Get dessert with components and items.
+      tags: [ Desserts ]
+
+      parameters:
+        - $ref: '#/components/parameters/DessertId'
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/DessertFull' }
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+
+  #  FULL VIEW: CALC RUN
+  /calc-runs/{calcRunId}/full:
+    get:
+      summary: Get calculation run with items and totals.
+      tags: [ Calculations ]
+
+      parameters:
+        - $ref: '#/components/parameters/CalcRunId'
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/CalcRunFull' }
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  parameters:
+    ProductId:
+      name: productId
+      in: path
+      required: true
+      schema: { type: string, format: uuid }
+      description: Product ID.
+
+    PackagePriceId:
+      name: packagePriceId
+      in: path
+      required: true
+      schema: { type: string, format: uuid }
+      description: Package price entry ID.
+
+    DessertId:
+      name: dessertId
+      in: path
+      required: true
+      schema: { type: string, format: uuid }
+      description: Dessert ID.
+
+    ComponentId:
+      name: componentId
+      in: path
+      required: true
+      schema: { type: string, format: uuid }
+      description: Component ID.
+
+    DessertComponentId:
+      name: dessertComponentId
+      in: path
+      required: true
+      schema: { type: string, format: uuid }
+      description: DessertComponent link ID.
+
+    ComponentItemId:
+      name: componentItemId
+      in: path
+      required: true
+      schema: { type: string, format: uuid }
+      description: ComponentItem ID.
+
+    CalcRunId:
+      name: calcRunId
+      in: path
+      required: true
+      schema: { type: string, format: uuid }
+      description: Calculation run ID.
+
+    UnitId:
+      name: unitId
+      in: path
+      required: true
+      schema: { type: string, format: uuid }
+      description: Unit ID.
+
+    LocaleId:
+      name: localeId
+      in: path
+      required: true
+      schema: { type: string, format: uuid }
+      description: Locale ID.
+
+    CurrencyCode:
+      name: currencyCode
+      in: path
+      required: true
+      schema: { type: string }
+      description: ISO currency code (e.g. EUR, USD).
+
+  schemas:
+    # ===== COMMON =====
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Error message.
+
+    # ===== AUTH =====
+    LoginRequest:
+      type: object
+      required: [ email, password ]
+      properties:
+        email:
+          type: string
+          format: email
+          example: test@gmail.com
+        password:
+          type: string
+          format: password
+          example: qwerty123456
+
+    SignUpRequest:
+      type: object
+      required: [ email, password, phone_number ]
+      properties:
+        email:
+          type: string
+          format: email
+          example: test@gmail.com
+        password:
+          type: string
+          format: password
+          example: qwerty123456
+        display_name:
+          type: string
+          nullable: true
+          example: Yura
+        phone_number:
+          type: string
+          example: +491756489871
+
+    TokenResponse:
+      type: object
+      required: [ token ]
+      properties:
+        token:
+          type: string
+          description: JWT token.
+
+    # ===== USERS =====
+    AppUser:
+      type: object
+      required: [ user_id, email, created_at, updated_at, status, phone_number ]
+      properties:
+        user_id:
+          type: string
+          format: uuid
+          readOnly: true
+        email:
+          type: string
+          format: email
+        display_name:
+          type: string
+          nullable: true
+        status:
+          type: string
+          example: ACTIVE
+        phone_number:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+
+    AppUserUpdate:
+      type: object
+      properties:
+        display_name:
+          type: string
+          nullable: true
+        phone_number:
+          type: string
+          nullable: true
+
+    # ===== LOCALE / CURRENCY / UNIT =====
+    Locale:
+      type: object
+      required: [ locale_id, language, country, metric_system, created_at, updated_at ]
+      properties:
+        locale_id:
+          type: string
+          format: uuid
+          readOnly: true
+        language:
+          type: string
+          example: ru
+        country:
+          type: string
+          example: DE
+        metric_system:
+          type: string
+          enum: [ METRIC, IMPERIAL ]
+          example: METRIC
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+
+    Currency:
+      type: object
+      required: [ currency_code, name, symbol ]
+      properties:
+        currency_code:
+          type: string
+          example: EUR
+        name:
+          type: string
+          example: Euro
+        symbol:
+          type: string
+          example: €
+
+    Unit:
+      type: object
+      required: [ unit_id, code, name, unit_type, to_base_factor, base_code, created_at, updated_at ]
+      properties:
+        unit_id:
+          type: string
+          format: uuid
+          readOnly: true
+        code:
+          type: string
+          example: g
+        name:
+          type: string
+          example: gram
+        unit_type:
+          type: string
+          enum: [ MASS, VOLUME, COUNT, LENGTH ]
+          example: MASS
+        to_base_factor:
+          type: number
+          example: 1
+        base_code:
+          type: string
+          example: g
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+
+    # ===== USER SETTINGS =====
+    UserSettings:
+      type: object
+      required:
+        - user_id
+        - locale_id
+        - currency_code
+        - base_mass_unit_id
+        - base_volume_unit_id
+        - base_length_unit_id
+        - base_count_unit_id
+        - created_at
+        - updated_at
+      properties:
+        user_id:
+          type: string
+          format: uuid
+          readOnly: true
+        locale_id:
+          type: string
+          format: uuid
+        currency_code:
+          type: string
+          example: EUR
+        base_mass_unit_id:
+          type: string
+          format: uuid
+        base_volume_unit_id:
+          type: string
+          format: uuid
+        base_length_unit_id:
+          type: string
+          format: uuid
+        base_count_unit_id:
+          type: string
+          format: uuid
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+
+    UserSettingsUpdate:
+      type: object
+      properties:
+        locale_id:
+          type: string
+          format: uuid
+        currency_code:
+          type: string
+        base_mass_unit_id:
+          type: string
+          format: uuid
+        base_volume_unit_id:
+          type: string
+          format: uuid
+        base_length_unit_id:
+          type: string
+          format: uuid
+        base_count_unit_id:
+          type: string
+          format: uuid
+
+    # ===== PRODUCT =====
+    Product:
+      type: object
+      required: [ product_id, user_id, name, default_unit_id, created_at, updated_at, status, note, is_active ]
+      properties:
+        product_id:
+          type: string
+          format: uuid
+          readOnly: true
+        user_id:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          example: Flour
+        default_unit_id:
+          type: string
+          format: uuid
+        status:
+          type: string
+          example: OK
+        note:
+          type: string
+        is_active:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+
+    ProductCreate:
+      type: object
+      required: [ name, default_unit_id ]
+      properties:
+        name:
+          type: string
+        default_unit_id:
+          type: string
+          format: uuid
+        status:
+          type: string
+          nullable: true
+        note:
+          type: string
+          nullable: true
+        is_active:
+          type: boolean
+          nullable: true
+
+    ProductUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+          nullable: true
+        default_unit_id:
+          type: string
+          format: uuid
+          nullable: true
+        status:
+          type: string
+          nullable: true
+        note:
+          type: string
+          nullable: true
+        is_active:
+          type: boolean
+          nullable: true
+
+    # ===== PRODUCT PACKAGE PRICE =====
+    ProductPackagePrice:
+      type: object
+      required: [ package_price_id, product_id, package_qty, package_unit_id, package_price, currency_code, valid_from, created_at ]
+      properties:
+        package_price_id:
+          type: string
+          format: uuid
+          readOnly: true
+        product_id:
+          type: string
+          format: uuid
+          readOnly: true
+        package_qty:
+          type: number
+          example: 1000
+        package_unit_id:
+          type: string
+          format: uuid
+        package_price:
+          type: number
+          example: 2.49
+        currency_code:
+          type: string
+          example: EUR
+        valid_from:
+          type: string
+          format: date
+        valid_to:
+          type: string
+          format: date
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+
+    ProductPackagePriceCreate:
+      type: object
+      required: [ package_qty, package_unit_id, package_price, currency_code, valid_from ]
+      properties:
+        package_qty:
+          type: number
+        package_unit_id:
+          type: string
+          format: uuid
+        package_price:
+          type: number
+        currency_code:
+          type: string
+        valid_from:
+          type: string
+          format: date
+        valid_to:
+          type: string
+          format: date
+          nullable: true
+
+    # ===== DESSERT =====
+    Dessert:
+      type: object
+      required: [ dessert_id, user_id, name, servings_default, created_at ]
+      properties:
+        dessert_id:
+          type: string
+          format: uuid
+          readOnly: true
+        user_id:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+        default_diameter_cm:
+          type: number
+          nullable: true
+        default_weight_g:
+          type: number
+          nullable: true
+        default_height_cm:
+          type: number
+          nullable: true
+        servings_default:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+
+    DessertCreate:
+      type: object
+      required: [ name, servings_default ]
+      properties:
+        name:
+          type: string
+        default_diameter_cm:
+          type: number
+          nullable: true
+        default_weight_g:
+          type: number
+          nullable: true
+        default_height_cm:
+          type: number
+          nullable: true
+        servings_default:
+          type: integer
+
+    DessertUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+          nullable: true
+        default_diameter_cm:
+          type: number
+          nullable: true
+        default_weight_g:
+          type: number
+          nullable: true
+        default_height_cm:
+          type: number
+          nullable: true
+        servings_default:
+          type: integer
+          nullable: true
+
+    # ===== COMPONENT =====
+    Component:
+      type: object
+      required: [ component_id, user_id, name, created_at ]
+      properties:
+        component_id:
+          type: string
+          format: uuid
+          readOnly: true
+        user_id:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+        description:
+          type: string
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+
+    ComponentCreate:
+      type: object
+      required: [ name ]
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+          nullable: true
+
+    ComponentUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+
+    # ===== DESSERT_COMPONENT (LINK) =====
+    DessertComponent:
+      type: object
+      required: [ dessert_component_id, dessert_id, component_id, sort_order ]
+      properties:
+        dessert_component_id:
+          type: string
+          format: uuid
+          readOnly: true
+        dessert_id:
+          type: string
+          format: uuid
+          readOnly: true
+        component_id:
+          type: string
+          format: uuid
+        sort_order:
+          type: integer
+          example: 1
+        note:
+          type: string
+          nullable: true
+
+    DessertComponentCreate:
+      type: object
+      required: [ component_id, sort_order ]
+      properties:
+        component_id:
+          type: string
+          format: uuid
+        sort_order:
+          type: integer
+        note:
+          type: string
+          nullable: true
+
+    DessertComponentUpdate:
+      type: object
+      properties:
+        sort_order:
+          type: integer
+          nullable: true
+        note:
+          type: string
+          nullable: true
+
+    # ===== COMPONENT_ITEM =====
+    ComponentItem:
+      type: object
+      required: [ component_item_id, component_id, product_id, qty, unit_id, sort_order ]
+      properties:
+        component_item_id:
+          type: string
+          format: uuid
+          readOnly: true
+        component_id:
+          type: string
+          format: uuid
+          readOnly: true
+        product_id:
+          type: string
+          format: uuid
+        qty:
+          type: number
+          example: 250
+        unit_id:
+          type: string
+          format: uuid
+        sort_order:
+          type: integer
+          example: 1
+
+    ComponentItemCreate:
+      type: object
+      required: [ product_id, qty, unit_id, sort_order ]
+      properties:
+        product_id:
+          type: string
+          format: uuid
+        qty:
+          type: number
+        unit_id:
+          type: string
+          format: uuid
+        sort_order:
+          type: integer
+
+    ComponentItemUpdate:
+      type: object
+      properties:
+        product_id:
+          type: string
+          format: uuid
+          nullable: true
+        qty:
+          type: number
+          nullable: true
+        unit_id:
+          type: string
+          format: uuid
+          nullable: true
+        sort_order:
+          type: integer
+          nullable: true
+
+    # ===== CALC_RUN =====
+    CalcRun:
+      type: object
+      required:
+        - calc_run_id
+        - user_id
+        - dessert_id
+        - input_mode
+        - scale_factor
+        - created_at
+      properties:
+        calc_run_id:
+          type: string
+          format: uuid
+          readOnly: true
+        user_id:
+          type: string
+          format: uuid
+          readOnly: true
+        dessert_id:
+          type: string
+          format: uuid
+        input_mode:
+          type: string
+          enum: [ BY_DIAMETER, BY_WEIGHT, BY_SERVINGS ]
+          example: BY_WEIGHT
+        target_diameter_cm:
+          type: number
+          nullable: true
+        target_weight_g:
+          type: number
+          nullable: true
+        target_height_cm:
+          type: number
+          nullable: true
+        target_servings:
+          type: integer
+          nullable: true
+        scale_factor:
+          type: number
+          example: 1.0
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+
+    CalcRunCreate:
+      type: object
+      required: [ dessert_id, input_mode ]
+      properties:
+        dessert_id:
+          type: string
+          format: uuid
+        input_mode:
+          type: string
+          enum: [ BY_DIAMETER, BY_WEIGHT, BY_SERVINGS ]
+        target_diameter_cm:
+          type: number
+          nullable: true
+        target_weight_g:
+          type: number
+          nullable: true
+        target_height_cm:
+          type: number
+          nullable: true
+        target_servings:
+          type: integer
+          nullable: true
+
+    # ===== CALC_ITEM =====
+    CalcItem:
+      type: object
+      required: [ calc_item_id, calc_run_id, product_id, total_qty, unit_id, cost_amount, currency_code ]
+      properties:
+        calc_item_id:
+          type: string
+          format: uuid
+          readOnly: true
+        calc_run_id:
+          type: string
+          format: uuid
+          readOnly: true
+        product_id:
+          type: string
+          format: uuid
+        total_qty:
+          type: number
+          example: 320
+        unit_id:
+          type: string
+          format: uuid
+        cost_amount:
+          type: number
+          example: 1.12
+        currency_code:
+          type: string
+          example: EUR
+
+    # ===== 1-CLICK CALCULATION REQUEST/RESPONSE =====
+    CalculateDessertRequest:
+      type: object
+      required: [ input_mode ]
+      properties:
+        input_mode:
+          type: string
+          enum: [ BY_DIAMETER, BY_WEIGHT, BY_SERVINGS ]
+        target_diameter_cm:
+          type: number
+          nullable: true
+        target_weight_g:
+          type: number
+          nullable: true
+        target_height_cm:
+          type: number
+          nullable: true
+        target_servings:
+          type: integer
+          nullable: true
+
+    CalculateDessertResponse:
+      type: object
+      required: [ run, items ]
+      properties:
+        run:
+          $ref: '#/components/schemas/CalcRun'
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/CalcItem'
+
+    # ===== FULL VIEW SCHEMAS =====
+    ComponentItemWithProduct:
+      type: object
+      required: [ item, product ]
+      properties:
+        item:
+          $ref: '#/components/schemas/ComponentItem'
+        product:
+          $ref: '#/components/schemas/Product'
+
+    DessertComponentFull:
+      type: object
+      required: [ link, component, items ]
+      properties:
+        link:
+          $ref: '#/components/schemas/DessertComponent'
+        component:
+          $ref: '#/components/schemas/Component'
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ComponentItemWithProduct'
+
+    DessertFull:
+      type: object
+      required: [ dessert, components ]
+      properties:
+        dessert:
+          $ref: '#/components/schemas/Dessert'
+        components:
+          type: array
+          items:
+            $ref: '#/components/schemas/DessertComponentFull'
+
+    CalcTotals:
+      type: object
+      required: [ total_cost_amount, currency_code ]
+      properties:
+        total_cost_amount:
+          type: number
+          example: 12.34
+        currency_code:
+          type: string
+          example: EUR
+
+    CalcItemWithProduct:
+      type: object
+      required: [ item, product ]
+      properties:
+        item:
+          $ref: '#/components/schemas/CalcItem'
+        product:
+          $ref: '#/components/schemas/Product'
+
+    CalcRunFull:
+      type: object
+      required: [ run, items, totals ]
+      properties:
+        run:
+          $ref: '#/components/schemas/CalcRun'
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/CalcItemWithProduct'
+        totals:
+          $ref: '#/components/schemas/CalcTotals'

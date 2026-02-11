@@ -1,4 +1,4 @@
---changeset cacelator:1
+
 CREATE TABLE   currency
 (
     currency_code TEXT PRIMARY KEY,

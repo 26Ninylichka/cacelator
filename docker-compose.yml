@@ -1,0 +1,22 @@
+services:
+
+  db:
+    image: postgres
+    restart: always
+    shm_size: 128mb
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: nina
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: cacelator
+    volumes:
+      - ./data:/var/lib/postgresql/data
+
+    #якщо щось крутиться на порті 5432 то виконайте команду
+    #lsof -i :5432
+    #скоріюйте PID
+    #kill /9 <PID>
+
+
+

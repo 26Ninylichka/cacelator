@@ -1,5 +1,25 @@
 spring:
   application:
     name: cacelator
-  jackson:
-    property-naming-strategy: SNAKE_CASE
+
+  datasource:
+    url: jdbc:postgresql://127.0.0.1:5432/cacelator
+    username: nina
+    password: password
+    driver-class-name: org.postgresql.Driver
+
+  liquibase:
+    enabled: true
+    url: jdbc:postgresql://127.0.0.1:5432/cacelator
+    user: nina
+    password: password
+    change-log: classpath:db/changelog/db.changelog-master.yaml
+
+  logging:
+    level:
+      liquibase: INFO
+      liquibase.util: INFO
+      liquibase.changelog: INFO
+      liquibase.ui: INFO
+
+

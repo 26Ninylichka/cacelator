@@ -1,0 +1,8 @@
+databaseChangeLog:
+  - include:
+      file: 001-create-schema.sql
+      relativeToChangelogFile: true
+
+  - include:
+      file: 002-change-app_user-rename-filed-name.sql
+      relativeToChangelogFile: true

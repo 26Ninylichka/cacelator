@@ -1,63 +1,78 @@
 package com.example.cacelator.controller;
 
-import com.example.cacelator.controller.dto.SignUpRequestDto;
-import com.example.cacelator.controller.dto.Status;
-import com.example.cacelator.controller.dto.Type;
-import com.example.cacelator.controller.dto.UserDto;
+import com.example.cacelator.controller.dto.*;
+import com.example.cacelator.mapper.UserMapper;
+import com.example.cacelator.service.UserService;
+import com.example.cacelator.service.model.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.Instant;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
 @RestController
 public class UserController {
 
-    private HashMap<UUID, UserDto> userDtoHashMap = new HashMap<>();
+    private final UserService userService;
+    private final UserMapper userMapper;
+
+    @Autowired
+    public UserController(UserMapper userMapper, UserService userService) {
+        this.userMapper = userMapper;
+        this.userService = userService;
+    }
 
     @PostMapping("/users")
     public ResponseEntity<UserDto> createUser(@RequestBody SignUpRequestDto signUpRequestDto) {
 
-        UserDto userDto = new UserDto();
-        userDto.setDisplayName(signUpRequestDto.getDisplayName());
-        userDto.setEmail(signUpRequestDto.getEmail());
-        userDto.setPhoneNumber(signUpRequestDto.getPhoneNumber());
-        userDto.setType(Type.USER);
-        userDto.setStatus(Status.ACTIVE);
-        userDto.setId(UUID.randomUUID());
-        userDto.setCreatedAt(Instant.now());
-        userDto.setUpdatedAt(Instant.now());
+        User user = userService.createUser(signUpRequestDto.getDisplayName(),
+                signUpRequestDto.getPhoneNumber(),
+                signUpRequestDto.getEmail(),
+                signUpRequestDto.getPassword());
+        UserDto userdto = userMapper.toDto(user);
 
 
-        userDtoHashMap.put(userDto.getId(), userDto);
-
-
-        return ResponseEntity.ok().body(new UserDto());
+        return ResponseEntity.ok().body(userdto);
     }
 
-  @GetMapping("/users")
-    public  ResponseEntity<List<UserDto>> getUsers(){
+    @GetMapping("/users")
+    public ResponseEntity<List<UserDto>> getUsers() {
+        List<User> userList = userService.getUsers();
+        List<UserDto> userDtoList = userList.stream().map(user -> userMapper.toDto(user))
+                .toList();
 
-      List<UserDto> userDtos =  userDtoHashMap.values().stream().toList();
-      return ResponseEntity.ok().body(userDtos);
-  }
+
+        return ResponseEntity.ok().body(userDtoList);
+    }
 
 
-    @GetMapping("/users/{adminId}")
-    public  ResponseEntity<UserDto> getUsers(@PathVariable UUID userId){
+//    @GetMapping("/users/{adminId}")
+//    public ResponseEntity<UserDto> getUsers(@PathVariable UUID userId) {
+//
+//
+//        return ResponseEntity.ok().body(userDto);
+//    }
 
-        UserDto userDto = userDtoHashMap.get(userId);
+    @GetMapping("/users/{userId}")
+    public ResponseEntity<UserDto> getUser(@PathVariable UUID userId) {
+
+        User user = userService.getUser(userId);
+
+        UserDto userDto = userMapper.toDto(user);
+
+        return ResponseEntity.ok().body(userDto);
+
+    }
+
+    @PutMapping("/users/{userId}/activate")
+    public ResponseEntity<UserDto> activeUser(@PathVariable UUID userId) {
+
+        User user = userService.activateUser(userId);
+
+        UserDto userDto = userMapper.toDto(user);
 
         return ResponseEntity.ok().body(userDto);
     }
-
-//@GetMapping("/users{auth}/login") я на цьому моменті не зрозуміла мені тут active чи логіку авторизаціі
-
-
-
-
 
 }

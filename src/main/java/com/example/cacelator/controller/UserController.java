@@ -1,10 +1,10 @@
 package com.example.cacelator.controller;
 
-import com.example.cacelator.controller.dto.UserDto;
-import com.example.cacelator.mapper.UserMapper;
+import com.example.cacelator.controller.dto.SignUpRequestDto;
+import com.example.cacelator.controller.dto.UpdateUserRequestDto;
+import com.example.cacelator.model.User;
 import com.example.cacelator.service.UserService;
-import com.example.cacelator.service.model.User;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,53 +12,40 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
+@RequestMapping("/users")
+@RequiredArgsConstructor
 public class UserController {
 
     private final UserService userService;
-    private final UserMapper userMapper;
 
-    @Autowired
-    public UserController(UserMapper userMapper, UserService userService) {
-        this.userMapper = userMapper;
-        this.userService = userService;
+    @PostMapping
+    public ResponseEntity<User> createUser(@RequestBody @Valid SignUpRequestDto requestDto) {
+        return ResponseEntity.ok(userService.createUser(requestDto));
     }
 
-    @GetMapping("/users")
-    public ResponseEntity<List<UserDto>> getUsers() {
-        List<User> userList = userService.getUsers();
-        List<UserDto> userDtoList = userList.stream().map(user -> userMapper.toDto(user))
-                .toList();
-
-        return ResponseEntity.ok().body(userDtoList);
+    @GetMapping
+    public ResponseEntity<List<User>> getUsers() {
+        return ResponseEntity.ok(userService.getUsers());
     }
 
-    @GetMapping("/users/{userId}")
-    public ResponseEntity<UserDto> getUser(@PathVariable UUID userId) {
-        User user = userService.getUser(userId);
-        UserDto userDto = userMapper.toDto(user);
-        return ResponseEntity.ok().body(userDto);
+    @GetMapping("/{userId}")
+    public ResponseEntity<User> getUser(@PathVariable UUID userId) {
+        return ResponseEntity.ok(userService.getUser(userId));
     }
 
-    @PutMapping("/users/{userId}")
-    public ResponseEntity<UserDto> updateUser(
-            @PathVariable UUID userId, @RequestBody UserDto userDto) {
-        User user = userService.updateUser(
-                userId,
-                userDto.getDisplayName(),
-                userDto.getPhoneNumber(),
-                userDto.getEmail());
-        return ResponseEntity.ok().body(userMapper.toDto(user));
+    @PutMapping("/{userId}")
+    public ResponseEntity<User> updateUser(@PathVariable UUID userId,
+                                           @RequestBody @Valid UpdateUserRequestDto requestDto) {
+        return ResponseEntity.ok(userService.updateUser(userId, requestDto));
     }
 
-    @PutMapping("/users/{userId}/activate")
-    public ResponseEntity<UserDto> activateUser(@PathVariable UUID userId) {
-        User user = userService.activateUser(userId);
-        return ResponseEntity.ok().body(userMapper.toDto(user));
+    @PutMapping("/{userId}/activate")
+    public ResponseEntity<User> activateUser(@PathVariable UUID userId) {
+        return ResponseEntity.ok(userService.activateUser(userId));
     }
 
-    @PutMapping("/users/{userId}/block")
-    public ResponseEntity<UserDto> blockUser(@PathVariable UUID userId) {
-        User user = userService.blockUser(userId);
-        return ResponseEntity.ok().body(userMapper.toDto(user));
+    @PutMapping("/{userId}/block")
+    public ResponseEntity<User> blockUser(@PathVariable UUID userId) {
+        return ResponseEntity.ok(userService.blockUser(userId));
     }
 }

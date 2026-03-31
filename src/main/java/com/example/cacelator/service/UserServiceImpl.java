@@ -1,123 +1,112 @@
 package com.example.cacelator.service;
 
+import com.example.cacelator.controller.dto.SignUpRequestDto;
+import com.example.cacelator.controller.dto.UpdateUserRequestDto;
+import com.example.cacelator.data.entity.UserEntity;
+import com.example.cacelator.data.repository.UserRepository;
 import com.example.cacelator.exception.UserAlreadyExistsException;
 import com.example.cacelator.exception.UserNotFoundException;
-import com.example.cacelator.service.model.Type;
-import lombok.extern.slf4j.Slf4j;
+import com.example.cacelator.model.Status;
+import com.example.cacelator.model.Type;
+import com.example.cacelator.model.User;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import com.example.cacelator.service.model.Status;
-import com.example.cacelator.service.model.User;
-
-import java.time.Instant;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
-@Slf4j
 @Service
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    private HashMap<UUID, com.example.cacelator.service.model.User> userHashMap = new HashMap<>();
+    private final UserRepository userRepository;
 
     @Override
-    public User createUser(String displayName, String phoneNumber, String email, String password) {
-
-        log.info("Attempting to create an user with email{} ", email);
-
-        Optional<User> optionalUser = userHashMap.values().stream()
-                .filter(user -> user.getEmail().equals(email))
-                .findFirst();
-
-        if (optionalUser.isPresent()) {
-            throw new UserAlreadyExistsException(email);
+    public User createUser(SignUpRequestDto requestDto) {
+        if (userRepository.existsByEmail(requestDto.getEmail())) {
+            throw new UserAlreadyExistsException(
+                    "User with email " + requestDto.getEmail() + " already exists"
+            );
         }
 
-        User user = new User();
-        user.setDisplayName(displayName);
-        user.setEmail(email);
-        user.setPhoneNumber(phoneNumber);
-        user.setPassword(password);
+        UserEntity userEntity = UserEntity.builder()
+                .email(requestDto.getEmail())
+                .password(requestDto.getPassword())
+                .status(Status.CREATED)
+                .type(Type.CUSTOMER)
+                .build();
 
-        Instant now = Instant.now();
-
-        user.setType(Type.USER);
-        user.setStatus(Status.ACTIVE);
-        user.setId(UUID.randomUUID());
-        user.setCreatedAt(now);
-        user.setUpdatedAt(now);
-
-        userHashMap.put(user.getId(), user);
-
-        log.info("Succsessfully created an user with email{} ", email);
-        return user;
+        UserEntity savedUser = userRepository.save(userEntity);
+        return mapToUser(savedUser);
     }
 
     @Override
     public List<User> getUsers() {
-        return userHashMap.values().stream().toList();
-
+        return userRepository.findAll()
+                .stream()
+                .map(this::mapToUser)
+                .toList();
     }
 
     @Override
     public User getUser(UUID userId) {
-        User user = userHashMap.get(userId);
+        UserEntity userEntity = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User with id " + userId + " not found"));
 
-        if (user != null) {
-            return user;
-
-        } else {
-            throw new UserNotFoundException(userId);
-        }
-
-    }
-
-    @Override
-    public User updateUser(UUID userId, String displayName, String phoneNumber, String email) {
-        User user = userHashMap.get(userId);
-
-        if (user == null) {
-            throw new UserNotFoundException(userId);
-        }
-
-        user.setDisplayName(displayName);
-        user.setPhoneNumber(phoneNumber);
-        user.setEmail(email);
-        user.setUpdatedAt(Instant.now());
-
-        userHashMap.put(user.getId(), user);
-
-        return user;
+        return mapToUser(userEntity);
     }
 
     @Override
     public User activateUser(UUID userId) {
-        User user = userHashMap.get(userId);
+        UserEntity userEntity = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User with id " + userId + " not found"));
 
-        if (user == null) {
-            throw new UserNotFoundException(userId);
-        }
+        userEntity.setStatus(Status.ACTIVE);
 
-        user.setStatus(Status.ACTIVE);
-        user.setUpdatedAt(Instant.now());
-        userHashMap.put(user.getId(), user);
-
-        return user;
+        UserEntity updatedUser = userRepository.save(userEntity);
+        return mapToUser(updatedUser);
     }
 
     @Override
     public User blockUser(UUID userId) {
-        User user = userHashMap.get(userId);
+        UserEntity userEntity = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User with id " + userId + " not found"));
 
-        if (user == null) {
-            throw new UserNotFoundException(userId);
+        userEntity.setStatus(Status.BLOCKED);
+
+        UserEntity updatedUser = userRepository.save(userEntity);
+        return mapToUser(updatedUser);
+    }
+
+    @Override
+    public User updateUser(UUID userId, UpdateUserRequestDto requestDto) {
+        UserEntity userEntity = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User with id " + userId + " not found"));
+
+        if (requestDto.getEmail() != null && !requestDto.getEmail().isBlank()) {
+            userEntity.setEmail(requestDto.getEmail());
         }
 
-        user.setStatus(Status.BLOCKED);
-        user.setUpdatedAt(Instant.now());
-        userHashMap.put(user.getId(), user);
+        if (requestDto.getStatus() != null) {
+            userEntity.setStatus(requestDto.getStatus());
+        }
 
-        return user;
+        if (requestDto.getType() != null) {
+            userEntity.setType(requestDto.getType());
+        }
+
+        UserEntity updatedUser = userRepository.save(userEntity);
+        return mapToUser(updatedUser);
+    }
+
+    private User mapToUser(UserEntity userEntity) {
+        return User.builder()
+                .id(userEntity.getId())
+                .email(userEntity.getEmail())
+                .status(userEntity.getStatus())
+                .type(userEntity.getType())
+                .createdAt(userEntity.getCreatedAt())
+                .updatedAt(userEntity.getUpdatedAt())
+                .build();
     }
 }

@@ -1,26 +1,17 @@
-package com.example.cacelator.service.model;
+package com.example.cacelator.controller.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
-
 @Data
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
-public class User {
+public class UserResponseDto {
     private UUID id;
-    private String displayName;
-    private String phoneNumber;
     private String email;
-    private String password;
     private Status status;
     private Type type;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-
 }

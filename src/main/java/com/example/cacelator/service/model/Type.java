@@ -1,5 +1,5 @@
 package com.example.cacelator.service.model;
 
 public enum Type {
-    USER, SUPER_USER
+    CUSTOMER, USER, SUPER_USER
 }

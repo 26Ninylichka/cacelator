@@ -2,11 +2,12 @@ package com.example.cacelator.controller;
 
 import com.example.cacelator.controller.dto.SignUpRequestDto;
 import com.example.cacelator.controller.dto.UpdateUserRequestDto;
-import com.example.cacelator.model.User;
+import com.example.cacelator.service.model.User;
 import com.example.cacelator.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 
 import java.util.List;
 import java.util.UUID;

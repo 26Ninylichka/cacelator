@@ -1,4 +1,4 @@
 package com.example.cacelator.config;
 
-public class SecutityConfig {
+public class OpenApiConfig {
 }

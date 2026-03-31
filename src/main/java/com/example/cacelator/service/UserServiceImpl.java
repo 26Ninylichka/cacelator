@@ -6,9 +6,9 @@ import com.example.cacelator.data.entity.UserEntity;
 import com.example.cacelator.data.repository.UserRepository;
 import com.example.cacelator.exception.UserAlreadyExistsException;
 import com.example.cacelator.exception.UserNotFoundException;
-import com.example.cacelator.model.Status;
-import com.example.cacelator.model.Type;
-import com.example.cacelator.model.User;
+import com.example.cacelator.service.model.Status;
+import com.example.cacelator.service.model.Type;
+import com.example.cacelator.service.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

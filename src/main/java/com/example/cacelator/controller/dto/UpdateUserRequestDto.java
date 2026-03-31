@@ -1,9 +1,10 @@
 package com.example.cacelator.controller.dto;
 
-import com.example.cacelator.model.Status;
-import com.example.cacelator.model.Type;
+import com.example.cacelator.service.model.Status;
+import com.example.cacelator.service.model.Type;
 import lombok.Getter;
 import lombok.Setter;
+import jakarta.validation.constraints.Email;
 
 @Getter
 @Setter

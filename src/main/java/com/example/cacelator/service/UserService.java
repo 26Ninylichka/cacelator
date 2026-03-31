@@ -2,7 +2,7 @@ package com.example.cacelator.service;
 
 import com.example.cacelator.controller.dto.SignUpRequestDto;
 import com.example.cacelator.controller.dto.UpdateUserRequestDto;
-import com.example.cacelator.model.User;
+import com.example.cacelator.service.model.User;
 
 import java.util.List;
 import java.util.UUID;

@@ -13,6 +13,10 @@ public interface UserService {
 
     User getUser(UUID userId);
 
+    User updateUser(UUID userId, String displayName, String phoneNumber, String email);
+
     User activateUser(UUID userId);
+
+    User blockUser(UUID userId);
 
 }

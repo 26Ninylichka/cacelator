@@ -1,6 +1,6 @@
 package com.example.cacelator.controller;
 
-import com.example.cacelator.controller.dto.*;
+import com.example.cacelator.controller.dto.UserDto;
 import com.example.cacelator.mapper.UserMapper;
 import com.example.cacelator.service.UserService;
 import com.example.cacelator.service.model.User;
@@ -23,56 +23,42 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping("/users")
-    public ResponseEntity<UserDto> createUser(@RequestBody SignUpRequestDto signUpRequestDto) {
-
-        User user = userService.createUser(signUpRequestDto.getDisplayName(),
-                signUpRequestDto.getPhoneNumber(),
-                signUpRequestDto.getEmail(),
-                signUpRequestDto.getPassword());
-        UserDto userdto = userMapper.toDto(user);
-
-
-        return ResponseEntity.ok().body(userdto);
-    }
-
     @GetMapping("/users")
     public ResponseEntity<List<UserDto>> getUsers() {
         List<User> userList = userService.getUsers();
         List<UserDto> userDtoList = userList.stream().map(user -> userMapper.toDto(user))
                 .toList();
 
-
         return ResponseEntity.ok().body(userDtoList);
     }
 
-
-//    @GetMapping("/users/{adminId}")
-//    public ResponseEntity<UserDto> getUsers(@PathVariable UUID userId) {
-//
-//
-//        return ResponseEntity.ok().body(userDto);
-//    }
-
     @GetMapping("/users/{userId}")
     public ResponseEntity<UserDto> getUser(@PathVariable UUID userId) {
-
         User user = userService.getUser(userId);
-
         UserDto userDto = userMapper.toDto(user);
-
         return ResponseEntity.ok().body(userDto);
+    }
 
+    @PutMapping("/users/{userId}")
+    public ResponseEntity<UserDto> updateUser(
+            @PathVariable UUID userId, @RequestBody UserDto userDto) {
+        User user = userService.updateUser(
+                userId,
+                userDto.getDisplayName(),
+                userDto.getPhoneNumber(),
+                userDto.getEmail());
+        return ResponseEntity.ok().body(userMapper.toDto(user));
     }
 
     @PutMapping("/users/{userId}/activate")
-    public ResponseEntity<UserDto> activeUser(@PathVariable UUID userId) {
-
+    public ResponseEntity<UserDto> activateUser(@PathVariable UUID userId) {
         User user = userService.activateUser(userId);
-
-        UserDto userDto = userMapper.toDto(user);
-
-        return ResponseEntity.ok().body(userDto);
+        return ResponseEntity.ok().body(userMapper.toDto(user));
     }
 
+    @PutMapping("/users/{userId}/block")
+    public ResponseEntity<UserDto> blockUser(@PathVariable UUID userId) {
+        User user = userService.blockUser(userId);
+        return ResponseEntity.ok().body(userMapper.toDto(user));
+    }
 }

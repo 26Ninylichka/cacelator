@@ -16,10 +16,10 @@ public class User {
     private String displayName;
     private String phoneNumber;
     private String email;
+    private String password;
     private Status status;
     private Type type;
     private Instant createdAt;
     private Instant updatedAt;
-
 
 }

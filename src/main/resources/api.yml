@@ -1,7 +1,7 @@
 openapi: 3.1.1
 
 info:
-  title: Cakelator API
+  title: Caсelator API
   version: 0.0.1
 
 servers:

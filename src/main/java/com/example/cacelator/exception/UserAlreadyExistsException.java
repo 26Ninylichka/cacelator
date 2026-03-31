@@ -1,9 +1,11 @@
 package com.example.cacelator.exception;
 
-import java.util.UUID;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
-public class UserAlreadyExistsException extends RuntimeException{
+@ResponseStatus(code = HttpStatus.BAD_REQUEST)
+public class UserAlreadyExistsException extends RuntimeException {
     public UserAlreadyExistsException(String email) {
-    super("User with email " + email + "already exists.");
+        super("User with email " + email + " already exists.");
     }
 }

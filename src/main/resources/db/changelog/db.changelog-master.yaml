@@ -6,3 +6,31 @@ databaseChangeLog:
   - include:
       file: 002-change-app_user-rename-filed-name.sql
       relativeToChangelogFile: true
+
+  - include:
+      file: 003-create-product-table.sql
+      relativeToChangelogFile: true
+
+  - include:
+      file: 004-create-component-table.sql
+      relativeToChangelogFile: true
+
+  - include:
+      file: 005-create-component-item-table.sql
+      relativeToChangelogFile: true
+
+  - include:
+      file: 006-create-dessert-table.sql
+      relativeToChangelogFile: true
+
+  - include:
+      file: 007-create-dessert-component-table.sql
+      relativeToChangelogFile: true
+
+  - include:
+      file: 008-create-calc-run-table.sql
+      relativeToChangelogFile: true
+
+  - include:
+      file: 009-add-base-weight-to-dessert.sql
+      relativeToChangelogFile: true

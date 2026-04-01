@@ -38,7 +38,7 @@ public class AuthServiceImpl implements AuthService {
 
         userRepository.save(userEntity);
 
-        String jwtToken = jwtService.generateToken(userEntity.getEmail());
+        String jwtToken = jwtService.generateToken(userEntity.getId().toString());
 
         return new TokenResponseDto(jwtToken);
     }
@@ -59,7 +59,7 @@ public class AuthServiceImpl implements AuthService {
             throw new IllegalArgumentException("Invalid email or password");
         }
 
-        String jwtToken = jwtService.generateToken(userEntity.getEmail());
+        String jwtToken = jwtService.generateToken(userEntity.getId().toString());
 
         return new TokenResponseDto(jwtToken);
     }

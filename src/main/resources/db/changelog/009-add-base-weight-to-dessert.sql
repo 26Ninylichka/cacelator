@@ -1,0 +1,2 @@
+ALTER TABLE  desert
+ADD COLUMN IF NOT EXISTS base_weight NUMERIC(10,2)

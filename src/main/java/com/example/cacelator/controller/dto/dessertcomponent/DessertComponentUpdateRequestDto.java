@@ -1,4 +1,4 @@
-package com.example.cacelator.dto.dessertcomponent;
+package com.example.cacelator.controller.dto.dessertcomponent;
 
 import java.util.UUID;
 import lombok.Getter;

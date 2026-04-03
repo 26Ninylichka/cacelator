@@ -7,11 +7,11 @@ import com.example.cacelator.data.repository.UserRepository;
 import com.example.cacelator.exception.UserAlreadyExistsException;
 import com.example.cacelator.exception.UserNotFoundException;
 import com.example.cacelator.service.model.Status;
-import com.example.cacelator.service.model.Type;
 import com.example.cacelator.service.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -29,12 +29,15 @@ public class UserServiceImpl implements UserService {
             );
         }
 
-        UserEntity userEntity = UserEntity.builder()
-                .email(requestDto.getEmail())
-                .password(requestDto.getPassword())
-                .status(Status.CREATED)
-                .type(Type.CUSTOMER)
-                .build();
+        UserEntity userEntity = new UserEntity();
+        userEntity.setUserId(UUID.randomUUID());
+        userEntity.setName(requestDto.getName());
+        userEntity.setEmail(requestDto.getEmail());
+        userEntity.setPassword(requestDto.getPassword());
+        userEntity.setPhoneNumber(requestDto.getPhoneNumber());
+        userEntity.setStatus(Status.CREATED.name());
+        userEntity.setCreatedAt(LocalDateTime.now());
+        userEntity.setUpdatedAt(LocalDateTime.now());
 
         UserEntity savedUser = userRepository.save(userEntity);
         return mapToUser(savedUser);
@@ -61,7 +64,8 @@ public class UserServiceImpl implements UserService {
         UserEntity userEntity = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("User with id " + userId + " not found"));
 
-        userEntity.setStatus(Status.ACTIVE);
+        userEntity.setStatus(Status.ACTIVE.name());
+        userEntity.setUpdatedAt(LocalDateTime.now());
 
         UserEntity updatedUser = userRepository.save(userEntity);
         return mapToUser(updatedUser);
@@ -72,7 +76,8 @@ public class UserServiceImpl implements UserService {
         UserEntity userEntity = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("User with id " + userId + " not found"));
 
-        userEntity.setStatus(Status.BLOCKED);
+        userEntity.setStatus(Status.BLOCKED.name());
+        userEntity.setUpdatedAt(LocalDateTime.now());
 
         UserEntity updatedUser = userRepository.save(userEntity);
         return mapToUser(updatedUser);
@@ -83,17 +88,23 @@ public class UserServiceImpl implements UserService {
         UserEntity userEntity = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("User with id " + userId + " not found"));
 
+        if (requestDto.getName() != null && !requestDto.getName().isBlank()) {
+            userEntity.setName(requestDto.getName());
+        }
+
         if (requestDto.getEmail() != null && !requestDto.getEmail().isBlank()) {
             userEntity.setEmail(requestDto.getEmail());
         }
 
-        if (requestDto.getStatus() != null) {
-            userEntity.setStatus(requestDto.getStatus());
+        if (requestDto.getPhoneNumber() != null && !requestDto.getPhoneNumber().isBlank()) {
+            userEntity.setPhoneNumber(requestDto.getPhoneNumber());
         }
 
-        if (requestDto.getType() != null) {
-            userEntity.setType(requestDto.getType());
+        if (requestDto.getStatus() != null) {
+            userEntity.setStatus(requestDto.getStatus().name());
         }
+
+        userEntity.setUpdatedAt(LocalDateTime.now());
 
         UserEntity updatedUser = userRepository.save(userEntity);
         return mapToUser(updatedUser);
@@ -101,10 +112,9 @@ public class UserServiceImpl implements UserService {
 
     private User mapToUser(UserEntity userEntity) {
         return User.builder()
-                .id(userEntity.getId())
+                .id(userEntity.getUserId())
                 .email(userEntity.getEmail())
-                .status(userEntity.getStatus())
-                .type(userEntity.getType())
+                .status(Status.valueOf(userEntity.getStatus()))
                 .createdAt(userEntity.getCreatedAt())
                 .updatedAt(userEntity.getUpdatedAt())
                 .build();

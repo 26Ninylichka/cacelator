@@ -24,11 +24,13 @@ public class DessertComponentEntity {
     @Id
     private UUID id;
 
-    @Column(nullable = false)
+    @Column(name = "desert_id", nullable = false)
     private UUID dessertId;
 
     @Column(nullable = false)
     private UUID componentId;
+
+    private UUID dessertComponentId;
 
     private Integer sortOrder;
 

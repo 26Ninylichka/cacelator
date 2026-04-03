@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cacelator — Cake Recipe Scaler</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="page">
+
+    <header class="header">
+        <div class="logo-block">
+            <h1 class="logo">Cacelator</h1>
+            <p class="subtitle">Professional cake recipe calculator</p>
+        </div>
+
+        <nav class="nav">
+            <a href="index.html" class="nav-link active">Home</a>
+            <a href="desserts.html" class="nav-link">Desserts</a>
+            <a href="calculation.html" class="nav-link">Calculations</a>
+        </nav>
+    </header>
+
+    <main class="main-content">
+        <section class="hero">
+            <div class="hero-text">
+                <h2>Scale your dessert recipes with precision</h2>
+                <p>
+                    Manage ingredients, components, and full dessert recipes. 
+                    Calculate exact quantities based on target weight, diameter, or servings 
+                    and get a consolidated shopping list in seconds.
+                </p>
+                <div class="hero-buttons">
+                    <button class="primary-btn" onclick="window.location.href='calculation.html'">Start Calculation</button>
+                    <button class="secondary-btn" onclick="window.location.href='desserts.html'">Manage Desserts</button>
+                </div>
+            </div>
+
+            <div class="app-card">
+                <h3 class="section-title">Quick Overview</h3>
+                <div class="app-form">
+                    <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 20px;">
+                        The most efficient way to scale professional pâtisserie recipes.
+                    </p>
+                    <div style="background: #F3F4F6; padding: 16px; border-radius: 8px; border: 1px solid var(--border);">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                            <span style="font-size: 12px; font-weight: 600;">System Status</span>
+                            <span style="font-size: 12px; color: var(--accent); font-weight: 700;">Online</span>
+                        </div>
+                        <div style="font-size: 13px; color: var(--text-main);">
+                            Ready to process complex ingredient calculations.
+                        </div>
+                    </div>
+                    <button class="secondary-btn full-width" style="margin-top: 20px;" onclick="window.location.href='products.html'">
+                        Browse Product Catalog
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <section class="features">
+            <h2 class="section-title">Everything you need</h2>
+
+            <div class="cards">
+                <div class="card">
+                    <h3>Inventory</h3>
+                    <p>Track all raw products, from flour and sugar to exotic fruits and chocolates.</p>
+                </div>
+
+                <div class="card" onclick="window.location.href='components.html'" style="cursor:pointer">
+                    <h3>Components</h3>
+                    <p>Create reusable recipe parts like sponge cakes, ganaches, and compotes.</p>
+                </div>
+
+                <div class="card" onclick="window.location.href='desserts.html'" style="cursor:pointer">
+                    <h3>Desserts</h3>
+                    <p>Combine multiple components into complete masterpieces prepared for scaling.</p>
+                </div>
+
+                <div class="card" onclick="window.location.href='calculation.html'" style="cursor:pointer">
+                    <h3>Smart Scaling</h3>
+                    <p>Get exact ingredient amounts for any cake size or serving count instantly.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="table-section">
+            <h2 class="section-title">Why use Cacelator?</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; margin-top: 20px;">
+                <div>
+                    <h4 style="margin-bottom: 12px; color: var(--primary);">Mathematical Accuracy</h4>
+                    <p style="font-size: 15px; color: var(--text-muted);">
+                        No more manual errors. Our engine calculates area-based scaling for diameters and precise ratios for weight.
+                    </p>
+                </div>
+                <div>
+                    <h4 style="margin-bottom: 12px; color: var(--primary);">Zero Waste</h4>
+                    <p style="font-size: 15px; color: var(--text-muted);">
+                        Calculate exactly what you need for your specific order. Reduce ingredient waste and optimize your costs.
+                    </p>
+                </div>
+                <div>
+                    <h4 style="margin-bottom: 12px; color: var(--primary);">Instant Shopping Lists</h4>
+                    <p style="font-size: 15px; color: var(--text-muted);">
+                        Get a consolidated list of all products needed across different components of your dessert.
+                    </p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p>© 2026 Cacelator. Engineered for pastry perfection.</p>
+    </footer>
+
+</div>
+</body>
+</html>

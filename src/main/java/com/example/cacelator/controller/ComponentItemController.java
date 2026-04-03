@@ -1,8 +1,8 @@
 package com.example.cacelator.controller;
 
-import com.example.cacelator.dto.componentitem.ComponentItemCreateRequestDto;
-import com.example.cacelator.dto.componentitem.ComponentItemResponseDto;
-import com.example.cacelator.dto.componentitem.ComponentItemUpdateRequestDto;
+import com.example.cacelator.controller.dto.componentitem.ComponentItemCreateRequestDto;
+import com.example.cacelator.controller.dto.componentitem.ComponentItemResponseDto;
+import com.example.cacelator.controller.dto.componentitem.ComponentItemUpdateRequestDto;
 import com.example.cacelator.service.ComponentItemService;
 import jakarta.validation.Valid;
 import java.util.List;

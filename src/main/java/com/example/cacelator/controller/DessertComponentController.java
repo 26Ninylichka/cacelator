@@ -1,8 +1,9 @@
 package com.example.cacelator.controller;
 
-import com.example.cacelator.dto.dessertcomponent.DessertComponentCreateRequestDto;
-import com.example.cacelator.dto.dessertcomponent.DessertComponentResponseDto;
-import com.example.cacelator.dto.dessertcomponent.DessertComponentUpdateRequestDto;
+
+import com.example.cacelator.controller.dto.dessertcomponent.DessertComponentCreateRequestDto;
+import com.example.cacelator.controller.dto.dessertcomponent.DessertComponentResponseDto;
+import com.example.cacelator.controller.dto.dessertcomponent.DessertComponentUpdateRequestDto;
 import com.example.cacelator.service.DessertComponentService;
 import jakarta.validation.Valid;
 import java.util.List;
@@ -47,7 +48,9 @@ public class DessertComponentController {
             @RequestBody @Valid DessertComponentUpdateRequestDto requestDto
     ) {
         return dessertComponentService.updateDessertComponent(
-                dessertId, dessertComponentId, requestDto
+                dessertId,
+                dessertComponentId,
+                requestDto
         );
     }
 

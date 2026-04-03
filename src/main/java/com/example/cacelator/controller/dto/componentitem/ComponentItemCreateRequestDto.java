@@ -1,4 +1,4 @@
-package com.example.cacelator.dto.componentitem;
+package com.example.cacelator.controller.dto.componentitem;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

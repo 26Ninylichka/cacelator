@@ -34,3 +34,13 @@ databaseChangeLog:
   - include:
       file: 009-add-base-weight-to-dessert.sql
       relativeToChangelogFile: true
+
+  - include:
+      file: 010-add-base-diameter-and-servings-to-dessert.sql
+      relativeToChangelogFile: true
+
+  - include:
+      file: test-user.sql
+      relativeToChangelogFile: true
+
+  

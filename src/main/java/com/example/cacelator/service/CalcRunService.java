@@ -1,7 +1,8 @@
 package com.example.cacelator.service;
 
-import com.example.cacelator.dto.calcrun.CalcRunCreateRequestDto;
-import com.example.cacelator.dto.calcrun.CalcRunResponseDto;
+import com.example.cacelator.controller.dto.calcrun.CalcRunCreateRequestDto;
+import com.example.cacelator.controller.dto.calcrun.CalcRunResponseDto;
+
 import java.util.List;
 import java.util.UUID;
 

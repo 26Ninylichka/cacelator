@@ -1,4 +1,4 @@
-package com.example.cacelator.dto.dessert;
+package com.example.cacelator.controller.dto.dessert;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
@@ -16,4 +16,6 @@ public class DessertCreateRequestDto {
     private String description;
 
     private BigDecimal baseWeight;
+    private BigDecimal baseDiameter;
+    private Integer servingsDefault;
 }

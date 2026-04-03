@@ -1,5 +1,5 @@
 
-package com.example.cacelator.dto.dessert;
+package com.example.cacelator.controller.dto.dessert;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -23,4 +23,6 @@ public class DessertResponseDto {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private BigDecimal baseWeight;
+    private BigDecimal baseDiameter;
+    private Integer servingsDefault;
 }

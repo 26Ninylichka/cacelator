@@ -11,7 +11,7 @@ import jakarta.validation.constraints.Size;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SignUpRequestDto {
-    private String displayName;
+    private String Name;
     private String phoneNumber;
     @NotBlank(message = "Email must not be empty")
     @Email(message = "Invalid email format")

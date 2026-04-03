@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculation - Cacelator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="page">
+
+    <header class="header">
+        <div>
+            <h1 class="logo">Cacelator</h1>
+            <p class="subtitle">Precision scaling engine</p>
+        </div>
+
+        <nav class="nav">
+            <a href="index.html" class="nav-link">Home</a>
+            <a href="desserts.html" class="nav-link">Desserts</a>
+            <a href="calculation.html" class="nav-link active">Calculation</a>
+        </nav>
+    </header>
+
+    <main class="main-content">
+
+        <section class="hero">
+            <div class="app-card">
+                <h2 class="section-title">New Calculation</h2>
+
+                <div class="app-form">
+                    <label for="dessertSelect">Select Base Recipe</label>
+                    <select id="dessertSelect"></select>
+
+                    <label for="inputMode">Scaling Mode</label>
+                    <select id="inputMode" onchange="handleModeChange()">
+                        <option value="BY_WEIGHT">Target Weight (kg/g)</option>
+                        <option value="BY_DIAMETER">Target Diameter (cm)</option>
+                        <option value="BY_SERVINGS">Target Servings</option>
+                    </select>
+
+                    <div id="weightBlock">
+                        <label for="targetWeight">Target Total Weight</label>
+                        <input id="targetWeight" type="number" step="0.01" placeholder="Example: 2.5">
+                    </div>
+
+                    <div id="diameterBlock" class="hidden-block">
+                        <label for="targetDiameter">Target Cake Diameter</label>
+                        <input id="targetDiameter" type="number" step="0.01" placeholder="Example: 24">
+                    </div>
+
+                    <div id="servingsBlock" class="hidden-block">
+                        <label for="targetServings">Target Servings Count</label>
+                        <input id="targetServings" type="number" placeholder="Example: 12">
+                    </div>
+
+                    <button class="primary-btn full-width" style="margin-top: 10px;" onclick="createCalculation()">
+                        Execute Calculation
+                    </button>
+
+                    <div id="messageBox" class="message-box"></div>
+                </div>
+            </div>
+
+            <div class="app-card">
+                <h2 class="section-title">Active Run Details</h2>
+                <div class="result-box">
+                    <span class="result-label">Current Configuration ID</span>
+                    <div id="calcRunResult" class="result-value">No active calculation</div>
+                </div>
+                
+                <div style="margin-top: 32px;">
+                    <h4 style="font-size: 14px; margin-bottom: 12px; color: var(--text-muted);">Quick Actions</h4>
+                    <div class="action-buttons">
+                        <button class="secondary-btn full-width" onclick="loadIngredients()">
+                            Refresh Scaled Ingredients
+                        </button>
+                        <button class="secondary-btn full-width" onclick="loadShoppingList()">
+                            Generate Consolidated List
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="table-section">
+            <h2 class="section-title">Scaled Ingredient Ratios</h2>
+
+            <table class="ingredients-table">
+                <thead>
+                <tr>
+                    <th>Component</th>
+                    <th>Product</th>
+                    <th>Unit</th>
+                    <th>Original qty</th>
+                    <th>Scaled qty</th>
+                </tr>
+                </thead>
+                <tbody id="ingredientsTable">
+                    <tr><td colspan="5" style="text-align: center; color: var(--text-muted); padding: 40px;">No calculation data to display. Create a calculation to see scaled ingredients.</td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section class="table-section">
+            <h2 class="section-title">Consolidated Shopping Totals</h2>
+
+            <table class="ingredients-table">
+                <thead>
+                <tr>
+                    <th>Product Needed</th>
+                    <th>Unit</th>
+                    <th>Total Scaled Quantity</th>
+                </tr>
+                </thead>
+                <tbody id="shoppingTable">
+                    <tr><td colspan="3" style="text-align: center; color: var(--text-muted); padding: 40px;">Consolidated list will appear here once a calculation is processed.</td></tr>
+                </tbody>
+            </table>
+        </section>
+
+    </main>
+
+    <footer class="footer">
+        <p>© 2026 Cacelator. Precision tools for professional pastry chefs.</p>
+    </footer>
+
+</div>
+
+<script src="calculation.js"></script>
+</body>
+</html>

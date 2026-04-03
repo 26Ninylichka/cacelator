@@ -35,7 +35,8 @@ public class TokenAuthFilter extends OncePerRequestFilter {
         String jwt = authHeader.substring(7);
 
         try {
-            jwtService.extractEmail(jwt);
+            String email = jwtService.extractEmail(jwt);
+            System.out.println("Authenticated user: " + email);
         } catch (Exception e) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return;

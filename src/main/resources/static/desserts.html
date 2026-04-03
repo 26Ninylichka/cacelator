@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Desserts — Cacelator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="page">
+    <header class="header">
+        <div>
+            <h1 class="logo">Cacelator</h1>
+            <p class="subtitle">Recipe management</p>
+        </div>
+        <nav class="nav">
+            <a href="index.html" class="nav-link">Home</a>
+            <a href="desserts.html" class="nav-link active">Desserts</a>
+            <a href="calculation.html" class="nav-link">Calculations</a>
+        </nav>
+    </header>
+
+    <main class="main-content">
+        <section class="hero">
+            <div class="app-card">
+                <h2 class="section-title">Register New Recipe</h2>
+                <div class="app-form">
+                    <label for="dessertName">Recipe Name</label>
+                    <input type="text" id="dessertName" placeholder="e.g. Vanilla Cloud Cake">
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px;">
+                        <div>
+                            <label for="baseWeight">Base Weight (kg)</label>
+                            <input type="number" id="baseWeight" step="0.01" placeholder="2.0">
+                        </div>
+                        <div>
+                            <label for="baseDiameter">Base Diameter (cm)</label>
+                            <input type="number" id="baseDiameter" step="0.1" placeholder="20">
+                        </div>
+                        <div>
+                            <label for="baseServings">Base Servings</label>
+                            <input type="number" id="baseServings" placeholder="10">
+                        </div>
+                    </div>
+
+                    <button class="primary-btn full-width" style="margin-top: 10px;" onclick="createDessert()">
+                        Create Recipe Meta
+                    </button>
+                    <div id="messageBox" class="message-box"></div>
+                </div>
+            </div>
+
+            <div class="app-card">
+                <h2 class="section-title">My Desserts</h2>
+                <div id="dessertList" style="display: flex; flex-direction: column; gap: 12px;">
+                    <!-- Desserts will be loaded here -->
+                    <p style="color: var(--text-muted); font-size: 14px;">Loading recipes...</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p>© 2026 Cacelator. Precision tools for professional pastry chefs.</p>
+    </footer>
+</div>
+
+<script src="desserts.js"></script>
+</body>
+</html>

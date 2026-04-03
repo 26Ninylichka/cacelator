@@ -1,17 +1,18 @@
-
 package com.example.cacelator.service.impl;
 
+import com.example.cacelator.controller.dto.dessertcomponent.DessertComponentCreateRequestDto;
+import com.example.cacelator.controller.dto.dessertcomponent.DessertComponentResponseDto;
+import com.example.cacelator.controller.dto.dessertcomponent.DessertComponentUpdateRequestDto;
 import com.example.cacelator.data.entity.DessertComponentEntity;
-import com.example.cacelator.dto.dessertcomponent.DessertComponentCreateRequestDto;
-import com.example.cacelator.dto.dessertcomponent.DessertComponentResponseDto;
-import com.example.cacelator.dto.dessertcomponent.DessertComponentUpdateRequestDto;
+import com.example.cacelator.data.repository.DessertComponentRepository;
 import com.example.cacelator.exception.EntityNotFoundException;
-import com.example.cacelator.repository.DessertComponentRepository;
 import com.example.cacelator.service.DessertComponentService;
-import java.util.List;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.Comparator;
+import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -37,17 +38,17 @@ public class DessertComponentServiceImpl implements DessertComponentService {
 
     @Override
     public List<DessertComponentResponseDto> getDessertComponents(UUID dessertId) {
-        return dessertComponentRepository.findAllByDessertIdOrderBySortOrderAsc(dessertId)
+        return dessertComponentRepository.findAllByDessertId(dessertId)
                 .stream()
+                .sorted(Comparator.comparing(DessertComponentEntity::getSortOrder))
                 .map(this::mapToDto)
                 .toList();
     }
 
     @Override
     public DessertComponentResponseDto getDessertComponent(UUID dessertId, UUID dessertComponentId) {
-        DessertComponentEntity entity = dessertComponentRepository.findByIdAndDessertId(
-                        dessertComponentId, dessertId
-                )
+        DessertComponentEntity entity = dessertComponentRepository
+                .findByDessertComponentIdAndDessertId(dessertComponentId, dessertId)
                 .orElseThrow(() -> new EntityNotFoundException(
                         "Dessert component with id " + dessertComponentId + " not found"
                 ));
@@ -61,9 +62,8 @@ public class DessertComponentServiceImpl implements DessertComponentService {
             UUID dessertComponentId,
             DessertComponentUpdateRequestDto requestDto
     ) {
-        DessertComponentEntity entity = dessertComponentRepository.findByIdAndDessertId(
-                        dessertComponentId, dessertId
-                )
+        DessertComponentEntity entity = dessertComponentRepository
+                .findByDessertComponentIdAndDessertId(dessertComponentId, dessertId)
                 .orElseThrow(() -> new EntityNotFoundException(
                         "Dessert component with id " + dessertComponentId + " not found"
                 ));
@@ -86,9 +86,8 @@ public class DessertComponentServiceImpl implements DessertComponentService {
 
     @Override
     public void deleteDessertComponent(UUID dessertId, UUID dessertComponentId) {
-        DessertComponentEntity entity = dessertComponentRepository.findByIdAndDessertId(
-                        dessertComponentId, dessertId
-                )
+        DessertComponentEntity entity = dessertComponentRepository
+                .findByDessertComponentIdAndDessertId(dessertComponentId, dessertId)
                 .orElseThrow(() -> new EntityNotFoundException(
                         "Dessert component with id " + dessertComponentId + " not found"
                 ));
@@ -98,7 +97,7 @@ public class DessertComponentServiceImpl implements DessertComponentService {
 
     private DessertComponentResponseDto mapToDto(DessertComponentEntity entity) {
         return DessertComponentResponseDto.builder()
-                .id(entity.getId())
+                .id(entity.getDessertComponentId())
                 .dessertId(entity.getDessertId())
                 .componentId(entity.getComponentId())
                 .sortOrder(entity.getSortOrder())

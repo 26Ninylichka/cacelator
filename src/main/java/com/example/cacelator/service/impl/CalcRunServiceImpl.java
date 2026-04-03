@@ -1,11 +1,13 @@
 package com.example.cacelator.service.impl;
 
 import com.example.cacelator.controller.dto.InputMode;
+import com.example.cacelator.controller.dto.calculation.CalcRunRequestDto;
+import com.example.cacelator.controller.dto.calculation.CalculationResponseDto;
 import com.example.cacelator.data.entity.CalcRunEntity;
-import com.example.cacelator.dto.calcrun.CalcRunCreateRequestDto;
-import com.example.cacelator.dto.calcrun.CalcRunResponseDto;
+import com.example.cacelator.controller.dto.calcrun.CalcRunCreateRequestDto;
+import com.example.cacelator.controller.dto.calcrun.CalcRunResponseDto;
 import com.example.cacelator.exception.EntityNotFoundException;
-import com.example.cacelator.repository.CalcRunRepository;
+import com.example.cacelator.data.repository.CalcRunRepository;
 import com.example.cacelator.service.CalcRunService;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -22,12 +24,9 @@ public class CalcRunServiceImpl implements CalcRunService {
 
     private final CalcRunRepository calcRunRepository;
 
-    private final com.example.cacelator.repository.DessertRepository dessertRepository;
+    private final com.example.cacelator.data.repository.DessertRepository dessertRepository;
 
 
-
-
-    @Override
     public CalcRunResponseDto createCalcRun(UUID userId, CalcRunCreateRequestDto requestDto) {
         BigDecimal scaleFactor = calculateScaleFactor(requestDto);
 
@@ -45,33 +44,45 @@ public class CalcRunServiceImpl implements CalcRunService {
     }
 
     private BigDecimal calculateScaleFactor(CalcRunCreateRequestDto requestDto) {
+        com.example.cacelator.data.entity.DessertEntity dessert = dessertRepository.findById(requestDto.getDessertId())
+                .orElseThrow(() -> new EntityNotFoundException("Dessert not found"));
 
-        // пока только BY_WEIGHT
         if (requestDto.getInputMode() == InputMode.BY_WEIGHT) {
-
-            BigDecimal baseWeight = getBaseWeight(requestDto.getDessertId());
-
+            BigDecimal baseWeight = dessert.getBaseWeight();
             if (baseWeight == null || baseWeight.compareTo(BigDecimal.ZERO) == 0) {
                 throw new IllegalArgumentException("Base weight is not set for dessert");
             }
-
             return requestDto.getTargetWeight()
                     .divide(baseWeight, 4, RoundingMode.HALF_UP);
+        }
+
+        if (requestDto.getInputMode() == InputMode.BY_SERVINGS) {
+            Integer baseServings = dessert.getServingsDefault();
+            if (baseServings == null || baseServings == 0) {
+                throw new IllegalArgumentException("Base servings are not set for dessert");
+            }
+            return new BigDecimal(requestDto.getTargetServings())
+                    .divide(new BigDecimal(baseServings), 4, RoundingMode.HALF_UP);
+        }
+
+        if (requestDto.getInputMode() == InputMode.BY_DIAMETER) {
+            BigDecimal baseDiameter = dessert.getBaseDiameter();
+            if (baseDiameter == null || baseDiameter.compareTo(BigDecimal.ZERO) == 0) {
+                throw new IllegalArgumentException("Base diameter is not set for dessert");
+            }
+            // Formula: (D_target / D_base)^2
+            BigDecimal ratio = requestDto.getTargetDiameter()
+                    .divide(baseDiameter, 4, RoundingMode.HALF_UP);
+            return ratio.multiply(ratio).setScale(4, RoundingMode.HALF_UP);
         }
 
         return BigDecimal.ONE;
     }
 
-    private BigDecimal getBaseWeight(UUID dessertId) {
-        return dessertRepository.findById(dessertId)
-                .orElseThrow(() -> new EntityNotFoundException("Dessert not found"))
-                .getBaseWeight();
-    }
 //    private BigDecimal calculateScaleFactor(CalcRunCreateRequestDto requestDto) {
 //        return  BigDecimal.ONE;
 //    }
 
-    @Override
     public List<CalcRunResponseDto> getCalcRuns(UUID userId) {
         return calcRunRepository.findAllByUserIdOrderByCreatedAtDesc(userId)
                 .stream()
@@ -79,7 +90,7 @@ public class CalcRunServiceImpl implements CalcRunService {
                 .toList();
     }
 
-    @Override
+
     public CalcRunResponseDto getCalcRun(UUID userId, UUID calcRunId) {
         CalcRunEntity entity = calcRunRepository.findByIdAndUserId(calcRunId, userId)
                 .orElseThrow(() -> new EntityNotFoundException(
@@ -89,7 +100,7 @@ public class CalcRunServiceImpl implements CalcRunService {
         return mapToDto(entity);
     }
 
-    @Override
+
     public void deleteCalcRun(UUID userId, UUID calcRunId) {
         CalcRunEntity entity = calcRunRepository.findByIdAndUserId(calcRunId, userId)
                 .orElseThrow(() -> new EntityNotFoundException(
@@ -113,4 +124,5 @@ public class CalcRunServiceImpl implements CalcRunService {
                 .updatedAt(entity.getUpdatedAt())
                 .build();
     }
+
 }

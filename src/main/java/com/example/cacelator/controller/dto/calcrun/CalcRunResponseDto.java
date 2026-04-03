@@ -1,4 +1,4 @@
-package com.example.cacelator.dto.calcrun;
+package com.example.cacelator.controller.dto.calcrun;
 
 import com.example.cacelator.controller.dto.InputMode;
 import java.math.BigDecimal;

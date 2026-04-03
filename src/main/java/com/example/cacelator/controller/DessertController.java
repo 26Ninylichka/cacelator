@@ -1,9 +1,9 @@
 
 package com.example.cacelator.controller;
 
-import com.example.cacelator.dto.dessert.DessertCreateRequestDto;
-import com.example.cacelator.dto.dessert.DessertResponseDto;
-import com.example.cacelator.dto.dessert.DessertUpdateRequestDto;
+import com.example.cacelator.controller.dto.dessert.DessertCreateRequestDto;
+import com.example.cacelator.controller.dto.dessert.DessertResponseDto;
+import com.example.cacelator.controller.dto.dessert.DessertUpdateRequestDto;
 import com.example.cacelator.service.DessertService;
 import jakarta.validation.Valid;
 import java.util.List;
@@ -20,46 +20,41 @@ public class DessertController {
 
     @PostMapping
     public DessertResponseDto createDessert(
-            @RequestHeader(value = "Authorization", required = false) String header,
+            @RequestHeader(value = "X-User-Id") UUID userId,
             @RequestBody @Valid DessertCreateRequestDto requestDto
     ) {
-        UUID userId = UUID.fromString("11111111-1111-1111-1111-111111111111");
         return dessertService.createDessert(userId, requestDto);
     }
 
     @GetMapping
     public List<DessertResponseDto> getDesserts(
-            @RequestHeader(value = "Authorization", required = false) String header
+            @RequestHeader(value = "X-User-Id") UUID userId
     ) {
-        UUID userId = UUID.fromString("11111111-1111-1111-1111-111111111111");
         return dessertService.getDesserts(userId);
     }
 
     @GetMapping("/{dessertId}")
     public DessertResponseDto getDessert(
-            @RequestHeader(value = "Authorization", required = false) String header,
+            @RequestHeader(value = "X-User-Id") UUID userId,
             @PathVariable UUID dessertId
     ) {
-        UUID userId = UUID.fromString("11111111-1111-1111-1111-111111111111");
         return dessertService.getDessert(userId, dessertId);
     }
 
     @PutMapping("/{dessertId}")
     public DessertResponseDto updateDessert(
-            @RequestHeader(value = "Authorization", required = false) String header,
+            @RequestHeader(value = "X-User-Id") UUID userId,
             @PathVariable UUID dessertId,
             @RequestBody @Valid DessertUpdateRequestDto requestDto
     ) {
-        UUID userId = UUID.fromString("11111111-1111-1111-1111-111111111111");
         return dessertService.updateDessert(userId, dessertId, requestDto);
     }
 
     @DeleteMapping("/{dessertId}")
     public void deleteDessert(
-            @RequestHeader(value = "Authorization", required = false) String header,
+            @RequestHeader(value = "X-User-Id") UUID userId,
             @PathVariable UUID dessertId
     ) {
-        UUID userId = UUID.fromString("11111111-1111-1111-1111-111111111111");
         dessertService.deleteDessert(userId, dessertId);
     }
 }

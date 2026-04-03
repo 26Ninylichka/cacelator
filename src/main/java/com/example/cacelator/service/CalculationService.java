@@ -1,7 +1,7 @@
 package com.example.cacelator.service;
 
-import com.example.cacelator.dto.calculation.CalculatedIngredientDto;
-import com.example.cacelator.dto.calculation.ShoppingListItemDto;
+import com.example.cacelator.controller.calculation.CalculatedIngredientDto;
+import com.example.cacelator.controller.calculation.ShoppingListItemDto;
 import java.util.List;
 import java.util.UUID;
 

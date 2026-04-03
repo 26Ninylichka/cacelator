@@ -23,3 +23,6 @@ spring:
       liquibase.ui: INFO
 
 
+springdoc:
+  swagger-ui:
+    custom-js: /swagger-custom.js

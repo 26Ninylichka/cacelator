@@ -25,7 +25,8 @@ public class ComponentEntity {
     private String name;
 
     private String description;
-    @Column(nullable = false)
+
+    @Column(name = "user_id", nullable = false)
     private UUID userId;
 
     @PrePersist

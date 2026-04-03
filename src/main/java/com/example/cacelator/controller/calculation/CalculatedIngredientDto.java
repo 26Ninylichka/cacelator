@@ -1,4 +1,4 @@
-package com.example.cacelator.dto.calculation;
+package com.example.cacelator.controller.calculation;
 
 import java.math.BigDecimal;
 import java.util.UUID;

@@ -1,4 +1,4 @@
-package com.example.cacelator.dto.dessert;
+package com.example.cacelator.controller.dto.dessert;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -8,4 +8,7 @@ import lombok.Setter;
 public class DessertUpdateRequestDto {
     private String name;
     private String description;
+    private java.math.BigDecimal baseWeight;
+    private java.math.BigDecimal baseDiameter;
+    private Integer servingsDefault;
 }

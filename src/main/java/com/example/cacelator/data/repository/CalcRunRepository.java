@@ -1,4 +1,4 @@
-package com.example.cacelator.repository;
+package com.example.cacelator.data.repository;
 
 import com.example.cacelator.data.entity.CalcRunEntity;
 import java.util.List;

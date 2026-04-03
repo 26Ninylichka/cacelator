@@ -1,7 +1,7 @@
 package com.example.cacelator.controller;
 
-import com.example.cacelator.dto.calculation.CalculatedIngredientDto;
-import com.example.cacelator.dto.calculation.ShoppingListItemDto;
+import com.example.cacelator.controller.calculation.CalculatedIngredientDto;
+import com.example.cacelator.controller.calculation.ShoppingListItemDto;
 import com.example.cacelator.service.CalculationService;
 import java.util.List;
 import java.util.UUID;
@@ -17,19 +17,17 @@ public class CalculationController {
 
     @GetMapping("/{calcRunId}/ingredients")
     public List<CalculatedIngredientDto> getCalculatedIngredients(
-            @RequestHeader(value = "Authorization", required = false) String header,
+            @RequestHeader(value = "X-User-Id") UUID userId,
             @PathVariable UUID calcRunId
     ) {
-        UUID userId = UUID.fromString("11111111-1111-1111-1111-111111111111");
         return calculationService.getCalculatedIngredients(userId, calcRunId);
     }
 
     @GetMapping("/{calcRunId}/shopping-list")
     public List<ShoppingListItemDto> getShoppingList(
-            @RequestHeader(value = "Authorization", required = false) String header,
+            @RequestHeader(value = "X-User-Id") UUID userId,
             @PathVariable UUID calcRunId
     ) {
-        UUID userId = UUID.fromString("11111111-1111-1111-1111-111111111111");
         return calculationService.getShoppingList(userId, calcRunId);
     }
 }

@@ -1,9 +1,9 @@
 
 package com.example.cacelator.service;
 
-import com.example.cacelator.dto.dessert.DessertCreateRequestDto;
-import com.example.cacelator.dto.dessert.DessertResponseDto;
-import com.example.cacelator.dto.dessert.DessertUpdateRequestDto;
+import com.example.cacelator.controller.dto.dessert.DessertCreateRequestDto;
+import com.example.cacelator.controller.dto.dessert.DessertResponseDto;
+import com.example.cacelator.controller.dto.dessert.DessertUpdateRequestDto;
 import java.util.List;
 import java.util.UUID;
 

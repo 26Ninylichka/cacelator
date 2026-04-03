@@ -1,4 +1,4 @@
-package com.example.cacelator.dto.componentitem;
+package com.example.cacelator.controller.dto.componentitem;
 
 import java.math.BigDecimal;
 import java.util.UUID;

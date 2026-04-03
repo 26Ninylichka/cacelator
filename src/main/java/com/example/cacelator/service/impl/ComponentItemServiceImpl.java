@@ -1,11 +1,11 @@
 package com.example.cacelator.service.impl;
 
 import com.example.cacelator.data.entity.ComponentItemEntity;
-import com.example.cacelator.dto.componentitem.ComponentItemCreateRequestDto;
-import com.example.cacelator.dto.componentitem.ComponentItemResponseDto;
-import com.example.cacelator.dto.componentitem.ComponentItemUpdateRequestDto;
+import com.example.cacelator.controller.dto.componentitem.ComponentItemCreateRequestDto;
+import com.example.cacelator.controller.dto.componentitem.ComponentItemResponseDto;
+import com.example.cacelator.controller.dto.componentitem.ComponentItemUpdateRequestDto;
 import com.example.cacelator.exception.EntityNotFoundException;
-import com.example.cacelator.repository.ComponentItemRepository;
+import com.example.cacelator.data.repository.ComponentItemRepository;
 import com.example.cacelator.service.ComponentItemService;
 import java.util.List;
 import java.util.UUID;
@@ -34,7 +34,8 @@ public class ComponentItemServiceImpl implements ComponentItemService {
 
     @Override
     public List<ComponentItemResponseDto> getItems(UUID componentId) {
-        return componentItemRepository.findAllByComponentIdOrderBySortOrderAsc(componentId)
+        return componentItemRepository
+                .findAllByComponentIdOrderBySortOrderAsc(componentId)
                 .stream()
                 .map(this::mapToDto)
                 .toList();
@@ -56,7 +57,8 @@ public class ComponentItemServiceImpl implements ComponentItemService {
             UUID itemId,
             ComponentItemUpdateRequestDto requestDto
     ) {
-        ComponentItemEntity item = componentItemRepository.findByIdAndComponentId(itemId, componentId)
+        ComponentItemEntity item = componentItemRepository
+                .findByIdAndComponentId(itemId, componentId)
                 .orElseThrow(() -> new EntityNotFoundException(
                         "Component item with id " + itemId + " not found"
                 ));

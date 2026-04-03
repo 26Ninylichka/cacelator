@@ -1,12 +1,14 @@
 package com.example.cacelator.service.impl;
 
 import com.example.cacelator.data.entity.DessertEntity;
-import com.example.cacelator.dto.dessert.DessertCreateRequestDto;
-import com.example.cacelator.dto.dessert.DessertResponseDto;
-import com.example.cacelator.dto.dessert.DessertUpdateRequestDto;
+import com.example.cacelator.controller.dto.dessert.DessertCreateRequestDto;
+import com.example.cacelator.controller.dto.dessert.DessertResponseDto;
+import com.example.cacelator.controller.dto.dessert.DessertUpdateRequestDto;
 import com.example.cacelator.exception.EntityNotFoundException;
-import com.example.cacelator.repository.DessertRepository;
+import com.example.cacelator.data.repository.DessertRepository;
 import com.example.cacelator.service.DessertService;
+
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -26,12 +28,14 @@ public class DessertServiceImpl implements DessertService {
             );
         }
 
-        DessertEntity dessert = DessertEntity.builder()
-                .userId(userId)
-                .name(requestDto.getName())
-                .description(requestDto.getDescription())
-                .baseWeight(requestDto.getBaseWeight())
-                .build();
+        DessertEntity dessert = new DessertEntity();
+        dessert.setUserId(userId);
+        dessert.setName(requestDto.getName());
+        dessert.setBaseWeight(requestDto.getBaseWeight());
+        dessert.setBaseDiameter(requestDto.getBaseDiameter());
+        dessert.setServingsDefault(requestDto.getServingsDefault());
+        dessert.setId(UUID.randomUUID());
+        dessert.setCreatedAt(OffsetDateTime.now());
 
         DessertEntity savedDessert = dessertRepository.save(dessert);
 
@@ -49,12 +53,12 @@ public class DessertServiceImpl implements DessertService {
 
     @Override
     public DessertResponseDto getDessert(UUID userId, UUID dessertId) {
-        DessertEntity dessert = dessertRepository.findByIdAndUserId(dessertId, userId)
+        DessertEntity desert = dessertRepository.findByIdAndUserId(dessertId, userId)
                 .orElseThrow(() -> new EntityNotFoundException(
                         "Dessert with id " + dessertId + " not found"
                 ));
 
-        return mapToDto(dessert);
+        return mapToDto(desert);
     }
 
     @Override
@@ -68,8 +72,16 @@ public class DessertServiceImpl implements DessertService {
             dessert.setName(requestDto.getName());
         }
 
-        if (requestDto.getDescription() != null) {
-            dessert.setDescription(requestDto.getDescription());
+        if (requestDto.getBaseWeight() != null) {
+            dessert.setBaseWeight(requestDto.getBaseWeight());
+        }
+
+        if (requestDto.getBaseDiameter() != null) {
+            dessert.setBaseDiameter(requestDto.getBaseDiameter());
+        }
+
+        if (requestDto.getServingsDefault() != null) {
+            dessert.setServingsDefault(requestDto.getServingsDefault());
         }
 
         DessertEntity updatedDessert = dessertRepository.save(dessert);
@@ -92,9 +104,10 @@ public class DessertServiceImpl implements DessertService {
                 .id(entity.getId())
                 .userId(entity.getUserId())
                 .name(entity.getName())
-                .description(entity.getDescription())
-                .createdAt(entity.getCreatedAt())
-                .updatedAt(entity.getUpdatedAt())
+                .baseWeight(entity.getBaseWeight())
+                .baseDiameter(entity.getBaseDiameter())
+                .servingsDefault(entity.getServingsDefault())
+                .createdAt(entity.getCreatedAt().toLocalDateTime())
                 .build();
     }
 }

@@ -34,7 +34,7 @@ public class CalcRunEntity {
     @Column(nullable = false)
     private UUID userId;
 
-    @Column(nullable = false)
+    @Column(name = "dessert_id", nullable = false)
     private UUID dessertId;
 
     @Enumerated(EnumType.STRING)

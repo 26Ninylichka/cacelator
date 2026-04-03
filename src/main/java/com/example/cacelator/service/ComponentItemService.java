@@ -1,8 +1,8 @@
 package com.example.cacelator.service;
 
-import com.example.cacelator.dto.componentitem.ComponentItemCreateRequestDto;
-import com.example.cacelator.dto.componentitem.ComponentItemResponseDto;
-import com.example.cacelator.dto.componentitem.ComponentItemUpdateRequestDto;
+import com.example.cacelator.controller.dto.componentitem.ComponentItemCreateRequestDto;
+import com.example.cacelator.controller.dto.componentitem.ComponentItemResponseDto;
+import com.example.cacelator.controller.dto.componentitem.ComponentItemUpdateRequestDto;
 import java.util.List;
 import java.util.UUID;
 

@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "component_item")
+@Table(name = "desert_component")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -23,9 +23,10 @@ import lombok.Setter;
 public class ComponentItemEntity {
 
     @Id
+    @Column(name = "desert_component_id")
     private UUID id;
 
-    @Column(nullable = false)
+    @Column(name = "component_id", nullable = false)
     private UUID componentId;
 
     @Column(nullable = false)
@@ -33,6 +34,8 @@ public class ComponentItemEntity {
 
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal quantity;
+
+    private UUID componentItemId;
 
     @Column(nullable = false)
     private String unit;

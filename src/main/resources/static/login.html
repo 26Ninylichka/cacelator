@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+</head>
+<body>
+
+<h2>Login</h2>
+
+<input type="text" id="email" placeholder="Email"><br><br>
+<input type="password" id="password" placeholder="Password"><br><br>
+
+<button onclick="login()">Login</button>
+
+<script>
+    async function login() {
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+
+        try {
+            const response = await fetch("/auth/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    email: email,
+                    password: password
+                })
+            });
+
+            const data = await response.json();
+
+            console.log("Login response:", data);
+
+            if (!response.ok) {
+                alert("Ошибка логина");
+                return;
+            }
+
+            const token = data.token || data.accessToken || data.jwt;
+
+            if (!token) {
+                alert("Токен не найден");
+                return;
+            }
+
+            localStorage.setItem("token", token);
+
+            alert("Успешный вход");
+            window.location.href = "/components.html";
+
+        } catch (error) {
+            console.error(error);
+            alert("Ошибка запроса");
+        }
+    }
+</script>
+
+</body>
+</html>

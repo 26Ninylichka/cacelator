@@ -3,18 +3,16 @@ package com.example.cacelator.service.impl;
 import com.example.cacelator.data.entity.*;
 import com.example.cacelator.data.repository.ComponentRepository;
 import com.example.cacelator.data.repository.ProductRepository;
-import com.example.cacelator.dto.calculation.CalculatedIngredientDto;
-import com.example.cacelator.dto.calculation.ShoppingListItemDto;
+import com.example.cacelator.controller.calculation.CalculatedIngredientDto;
+import com.example.cacelator.controller.calculation.ShoppingListItemDto;
 import com.example.cacelator.exception.EntityNotFoundException;
-import com.example.cacelator.repository.CalcRunRepository;
-import com.example.cacelator.repository.ComponentItemRepository;
-
-import org.springframework.data.repository.Repository;
+import com.example.cacelator.data.repository.CalcRunRepository;
+import com.example.cacelator.data.repository.ComponentItemRepository;
 
 import java.util.UUID;
 
 
-import com.example.cacelator.repository.DessertComponentRepository;
+import com.example.cacelator.data.repository.DessertComponentRepository;
 
 import com.example.cacelator.service.CalculationService;
 import java.math.BigDecimal;
@@ -23,7 +21,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
